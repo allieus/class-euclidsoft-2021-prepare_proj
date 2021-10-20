@@ -1,0 +1,20 @@
+{% extends "diary/base.html" %}
+
+{% block content %}
+    <h2>Post Detail</h2>
+    {{ post.author }}
+    <div style="background-color: rgba(200, 200, 200, 0.5);">
+        {{ post.message }}
+    </div>
+    {% if post.photo %}
+        <img src="{{ post.photo.url }}" style="max-width: 100%;" alt="{{ post.author }}'s Photo" />
+    {% endif %}
+
+    {{ post.point.y }}, {{ post.point.x }}
+
+    <hr/>
+
+    <a href="{% url "diary:post_list" %}">
+        Post List
+    </a>
+{% endblock %}

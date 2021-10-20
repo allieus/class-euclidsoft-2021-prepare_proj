@@ -1,0 +1,18 @@
+{% extends "diary/base.html" %}
+
+{% block content %}
+    <h2>Post List</h2>
+    <ul>
+        {% for post in post_list %}
+            <li>
+                <a href="{{ post.get_absolute_url }}">
+                    #{{ post.pk }}
+                </a>
+                {{ post.message }}
+                by {{ post.author }}
+            </li>
+        {% endfor %}
+    </ul>
+    <hr/>
+    <a href="{% url "diary:post_new" %}">Post New</a>
+{% endblock %}
