@@ -72,6 +72,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'prepare_proj.wsgi.application'
 
 
+# Custom User Model
+# https://docs.djangoproject.com/ko/3.2/topics/auth/customizing/
+
+AUTH_USER_MODEL = 'accounts.User'
+
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
