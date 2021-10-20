@@ -7,3 +7,5 @@ pymemcache
 django-redis
 
 mysqlclient
+
+django-debug-toolbar

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'debug_toolbar',
     'app1',
     'app2',
 ]
@@ -62,6 +63,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ] + MIDDLEWARE
 
 ROOT_URLCONF = 'prepare_proj.urls'
 
@@ -168,3 +174,12 @@ MEDIA_ROOT = env.str("MEDIA_ROOT", str(BASE_DIR / 'media'))
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# django-debug-toolbar
+
+INTERNAL_IPS = env.list("INTERNAL_IPS", default=['127.0.0.1'])
+# 다중 컨테이너 환경이라서 INTERNAL_IPS 지정이 어렵습니다.
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG,
+}
