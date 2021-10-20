@@ -42,7 +42,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=mysql://root:rootpassw0rd@mysql:3306/django_db
+      - DATABASE_URL=mysqlgis://root:rootpassw0rd@mysql:3306/django_db
       - CACHE_URL=pymemcache://memcached:11211
       - REDIS_CACHE_URL=rediscache://redis:6379/1?CLIENT_CLASS=django_redis.client.DefaultClient
     depends_on:
