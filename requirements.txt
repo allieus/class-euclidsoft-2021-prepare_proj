@@ -11,4 +11,6 @@ mysqlclient
 pytest
 pytest-django
 
+django-bootstrap-v5
+
 django-debug-toolbar

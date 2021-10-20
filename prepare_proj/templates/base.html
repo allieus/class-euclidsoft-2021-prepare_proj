@@ -1,3 +1,5 @@
+{% load bootstrap5 %}
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -6,27 +8,29 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Django Project</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    <div class="container">
+        <h1>Django Project</h1>
 
-    <h1>Django Project</h1>
+        <ul>
+            {% if not user.is_authenticated %}
+                <li><a href="{% url "accounts:login" %}">로그인</a></li>
+                <li><a href="{% url "accounts:signup" %}">회원가입</a></li>
+            {% else %}
+                <li><a href="{% url "accounts:profile" %}">프로필</a></li>
+                <li><a href="{% url "accounts:logout" %}">로그아웃</a></li>
+            {% endif %}
+        </ul>
 
-    <ul>
-        {% if not user.is_authenticated %}
-            <li><a href="{% url "accounts:login" %}">로그인</a></li>
-            <li><a href="{% url "accounts:signup" %}">회원가입</a></li>
-        {% else %}
-            <li><a href="{% url "accounts:profile" %}">프로필</a></li>
-            <li><a href="{% url "accounts:logout" %}">로그아웃</a></li>
-        {% endif %}
-    </ul>
+        {% block content %}
+        {% endblock %}
 
-    {% block content %}
-    {% endblock %}
-
-    <hr/>
-    &copy; 2021. Ask Company.
-
+        <hr/>
+        &copy; 2021. Ask Company.
+    </div>
 </body>
 </html>
