@@ -117,7 +117,7 @@ DATABASES = {
 
 CACHES = {
     "default": env.cache(default="pymemcache://127.0.0.1:11211"),
-    "redis": env.cache_url(default="rediscache://127.0.0.1:6379/1?CLIENT_CLASS=django_redis.client.DefaultClient"),
+    "redis": env.cache("REDIS_CACHE_URL", default="rediscache://127.0.0.1:6379/1?CLIENT_CLASS=django_redis.client.DefaultClient"),
 }
 
 

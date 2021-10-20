@@ -5,3 +5,5 @@ django-environ
 
 pymemcache
 django-redis
+
+mysqlclient
