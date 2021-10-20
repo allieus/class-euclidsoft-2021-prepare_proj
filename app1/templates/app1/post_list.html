@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for post in post_list %}
+        {{ post }}
+    {% endfor %}
+    <hr/>
+    렌더링 시각 : {{ current_time }}
+{% endblock %}
