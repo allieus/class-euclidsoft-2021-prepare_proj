@@ -1,2 +1,5 @@
 django==3.2.8
 pillow
+
+pymemcache
+django-redis
