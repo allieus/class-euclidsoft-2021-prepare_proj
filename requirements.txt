@@ -8,4 +8,7 @@ django-redis
 
 mysqlclient
 
+pytest
+pytest-django
+
 django-debug-toolbar
