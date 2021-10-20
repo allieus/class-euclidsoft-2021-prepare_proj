@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.gis.geos import GEOSGeometry
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from .forms import PostForm
@@ -13,6 +14,13 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     # fields = "__all__"
     form_class = PostForm
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user
+        y, x = 36.3679652, 127.388167  # 둔산대공원
+        post.point = GEOSGeometry(f"POINT({x} {y})", srid=4326)
+        return super().form_valid(form)
 
 
 class PostDetailView(DetailView):
