@@ -11,21 +11,32 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from environ import Env
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+env = Env()
+env.ENVIRON.setdefault = env.ENVIRON.__setitem__
+
+dot_env_path = BASE_DIR / ".env"
+if dot_env_path.exists():
+    with dot_env_path.open(encoding="utf8") as f:
+        env.read_env(f)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ygqg-_5rvgkvx32!9bq-=wj4awp8!0e6k*zb@s=1)-c4-rh410'
+SECRET_KEY = env.str("SECRET_KEY", 'django-insecure-ygqg-_5rvgkvx32!9bq-=wj4awp8!0e6k*zb@s=1)-c4-rh410')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
 # Application definition
@@ -83,32 +94,31 @@ AUTH_USER_MODEL = 'accounts.User'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
 }
 
 
 # Cache
 # https://docs.djangoproject.com/ko/3.2/topics/cache/
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
-
 # CACHES = {
-#     "default": {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     },
+#     "redis": {
 #         "BACKEND": "django_redis.cache.RedisCache",
 #         "LOCATION": "redis://127.0.0.1:6379/1",
 #         "OPTIONS": {
 #             "CLIENT_CLASS": "django_redis.client.DefaultClient",
 #         }
-#     }
+#     },
 # }
+
+CACHES = {
+    "default": env.cache(default="pymemcache://127.0.0.1:11211"),
+    "redis": env.cache_url(default="rediscache://127.0.0.1:6379/1?CLIENT_CLASS=django_redis.client.DefaultClient"),
+}
 
 
 # Password validation
@@ -133,9 +143,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = env.str("LANGUAGE_CODE", "en-us")
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = env.str("TIME_ZONE", "UTC")
 
 USE_I18N = True
 
@@ -147,10 +157,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+STATIC_URL = env.str("STATIC_URL", '/static/')
 
+MEDIA_URL = env.str("MEDIA_URL", '/media/')
+MEDIA_ROOT = env.str("MEDIA_ROOT", str(BASE_DIR / 'media'))
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
