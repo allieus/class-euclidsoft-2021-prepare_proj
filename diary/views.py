@@ -1,5 +1,7 @@
+import re
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos import GEOSGeometry, Point
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from .forms import PostForm
@@ -8,6 +10,20 @@ from .models import Post
 
 class PostListView(ListView):
     queryset = Post.objects.all().select_related("author")
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        center_xy = self.request.GET.get("center", "")
+        if center_xy:
+            try:
+                # 위도: latitude, 경도: longitude
+                latitude, longitude = re.findall(r"([\d]+\.?[\d]*)", center_xy)
+                qs = qs.nearest(latitude, longitude, distance_meter=1000)
+            except ValueError:
+                pass
+
+        return qs
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
